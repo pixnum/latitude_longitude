@@ -1,0 +1,38 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Latitude and Longitude Tracker</title> <style> body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; text-align: center; } #container { border: 1px solid #ccc; padding: 20px; border-radius: 8px; width: 80%; max-width: 600px; } #location { margin-top: 20px; font-size: 18px; } #accuracy { margin-top: 10px; font-size: 14px; color: #555; } </style> </head> <body> <div id="container"> <h1>Latitude and Longitude Tracker</h1> <div id="location"> Latitude: <span id="latitude">-</span><br> Longitude: <span id="longitude">-</span> </div> <div id="accuracy"> Accuracy: <span id="gpsAccuracy">-</span> meters </div> </div>
+<script>
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(showPosition, showError, { enableHighAccuracy: true });
+        } else {
+            document.getElementById("location").innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function showPosition(position) {
+        document.getElementById("latitude").textContent = position.coords.latitude;
+        document.getElementById("longitude").textContent = position.coords.longitude;
+        document.getElementById("gpsAccuracy").textContent = position.coords.accuracy;
+    }
+
+    function showError(error) {
+        let message;
+        switch(error.code) {
+            case error.PERMISSION_DENIED:
+                message = "User denied the request for Geolocation."
+                break;
+            case error.POSITION_UNAVAILABLE:
+                message = "Location information is unavailable."
+                break;
+            case error.TIMEOUT:
+                message = "The request to get user location timed out."
+                break;
+            case error.UNKNOWN_ERROR:
+                message = "An unknown error occurred."
+                break;
+        }
+        document.getElementById("location").innerHTML = "Error: " + message;
+    }
+
+    getLocation();
+</script>
+</body> </html>
